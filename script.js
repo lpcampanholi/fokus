@@ -11,21 +11,25 @@ const titulo = document.querySelector(".app__title");
 const botoes = document.querySelectorAll(".app__card-button");
 
 focoBt.addEventListener("click", () => {
+  segundos = 1500;
   alterarContexto("foco");
   focoBt.classList.add("active");
 });
 
 curtoBt.addEventListener("click", () => {
+  segundos = 300;
   alterarContexto("descanso-curto");
   curtoBt.classList.add("active");
 });
 
 longoBt.addEventListener("click", () => {
+  segundos = 900;
   alterarContexto("descanso-longo");
   longoBt.classList.add("active");
 });
 
 function alterarContexto(contexto) {
+  mostrarTempo();
   botoes.forEach((botao) => {
     botao.classList.remove("active");
   });
@@ -71,46 +75,69 @@ musicaFocoInput.addEventListener("change", () => {
   }
 });
 
-
 // TEMPORIZADOR
 
 // Áudios
-const audioTermino = new Audio("sons/beep.mp3");
+const audioTempoFinalizado = new Audio("sons/beep.mp3");
 const audioPause = new Audio("sons/pause.mp3");
 const audioPlay = new Audio("sons/play.wav");
 
-let segundos = 15;
+let segundos = 1500;
 let intervaloId = null;
 
 console.log(segundos);
 
+// Botão começar
 const startPauseBt = document.querySelector("#start-pause");
+const startPauseBtConteudo = document.querySelector("#start-pause span");
+const startPauseBtImagem = document.querySelector("#start-pause img");
 
-startPauseBt.addEventListener("click", iniciarOuPausar);
-
-function iniciarOuPausar() {
+startPauseBt.addEventListener("click", () => {
   if (intervaloId) {
     audioPause.play();
     pararIntervalo();
-  } else {
-    audioPlay.play();
-    intervaloId = setInterval(contagemRegressiva, 1000);
-  };
-};
+    return
+  }
+  audioPlay.play();
+  iniciarIntervalo();
+});
 
 const contagemRegressiva = () => {
   if (segundos === 0) {
     console.log("Tempo finalizado");
-    audioTermino.play();
+    audioTempoFinalizado.play();
     pararIntervalo();
+    segundos = 1500;
+    mostrarTempo();
     return
   }
   segundos--;
   console.log(segundos);
+  mostrarTempo();
+};
+
+function iniciarIntervalo() {
+  intervaloId = setInterval(contagemRegressiva, 1000);
+  startPauseBtConteudo.textContent = "Pausar";
+  startPauseBtImagem.setAttribute("src", "imagens/pause.png")
 };
 
 function pararIntervalo() {
   clearInterval(intervaloId);
   intervaloId = null;
   console.log("Intervalo parado");
+  startPauseBtConteudo.textContent = "Começar";
+  startPauseBtImagem.setAttribute("src", "imagens/play_arrow.png")
 };
+
+
+// View Temporizador
+const tempoNaTela = document.querySelector("#timer");
+
+function mostrarTempo() {
+  const tempo = new Date(segundos * 1000);
+  const tempoFormatado = tempo.toLocaleTimeString("pr-Br", {minute: "2-digit", second: "2-digit"});
+  tempoNaTela.innerHTML = `${tempoFormatado}`;
+};
+
+mostrarTempo();
