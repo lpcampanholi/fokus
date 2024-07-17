@@ -74,19 +74,15 @@ musicaFocoInput.addEventListener("change", () => {
 
 // TEMPORIZADOR
 
-let segundos = 5;
+// Áudios
+const audioTermino = new Audio("sons/beep.mp3");
+const audioPause = new Audio("sons/pause.mp3");
+const audioPlay = new Audio("sons/play.wav");
+
+let segundos = 15;
 let intervaloId = null;
 
 console.log(segundos);
-
-const contagemRegressiva = () => {
-  if (segundos <= 0) {
-    alert("Tempo finalizado");
-    return
-  };
-  segundos--;
-  console.log(segundos);
-};
 
 const startPauseBt = document.querySelector("#start-pause");
 
@@ -94,13 +90,27 @@ startPauseBt.addEventListener("click", iniciarOuPausar);
 
 function iniciarOuPausar() {
   if (intervaloId) {
-    zerar();
-    return
+    audioPause.play();
+    pararIntervalo();
+  } else {
+    audioPlay.play();
+    intervaloId = setInterval(contagemRegressiva, 1000);
   };
-  intervaloId = setInterval(contagemRegressiva, 1000);
 };
 
-function zerar() {
+const contagemRegressiva = () => {
+  if (segundos === 0) {
+    console.log("Tempo finalizado");
+    audioTermino.play();
+    pararIntervalo();
+    return
+  }
+  segundos--;
+  console.log(segundos);
+};
+
+function pararIntervalo() {
   clearInterval(intervaloId);
   intervaloId = null;
-}
+  console.log("Intervalo parado");
+};

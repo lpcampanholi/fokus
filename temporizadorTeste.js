@@ -6,4 +6,6 @@ function incrementar() {
   console.log(segundos);
 };
 
-setInterval(incrementar, 1000);
+const intervalo = setInterval(incrementar, 1000);
+
+clearInterval(intervalo);
