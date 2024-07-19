@@ -136,7 +136,7 @@ const tempoNaTela = document.querySelector("#timer");
 
 function mostrarTempo() {
   const tempo = new Date(segundos * 1000);
-  const tempoFormatado = tempo.toLocaleTimeString("pr-Br", {minute: "2-digit", second: "2-digit"});
+  const tempoFormatado = tempo.toLocaleTimeString("pr-BR", {minute: "2-digit", second: "2-digit"});
   tempoNaTela.innerHTML = `${tempoFormatado}`;
 };
 
