@@ -1,16 +1,25 @@
+main {
+  width: 50%;
+}
+
 .hidden {
   display: none
 }
 
 .tarefa {
-  border: 2px solid rgb(75, 75, 75);
-  border-radius: 1em;
-  width: 50%;
+  border: 1px solid rgb(75, 75, 75);
   text-align: center;
   display: flex;
   justify-content: space-between;
+  padding: 0.5em;
 }
 
 #text_area {
   width: 50%;
+}
+
+.listaDeTarefas {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
