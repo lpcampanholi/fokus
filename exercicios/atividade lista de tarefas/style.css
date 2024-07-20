@@ -103,3 +103,8 @@ main {
 #btnSalvar {
   margin: 1em;
 }
+
+.botoesContainer {
+  display: flex;
+  gap: 0.5em;
+}

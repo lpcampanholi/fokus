@@ -7,7 +7,6 @@ const listaDeTarefas = document.querySelector(".listaDeTarefas");
 
 // Obter itens da localStorage
 const tarefas = JSON.parse(localStorage.getItem("Tarefas")) || [];
-console.log(`tarefas: ${tarefas}`);
 
 // Atualizar tarefa
 function atualizarTarefa() {
@@ -28,14 +27,22 @@ function criarElementoTarefa(tarefa) {
   const paragrafo = document.createElement("p");
   paragrafo.textContent = tarefa.descricao;
 
-  const botao = document.createElement("button");
-  botao.textContent = "Editar";
+  const botoesContainer = document.createElement("div");
+  botoesContainer.classList.add("botoesContainer");
+
+  const botaoEditar = document.createElement("button");
+  botaoEditar.textContent = "Editar";
+
+  const botaoExcluir = document.createElement("button");
+  botaoExcluir.textContent = "Excluir";
 
   li.append(paragrafo);
-  li.append(botao);
-
+  botoesContainer.append(botaoEditar);
+  botoesContainer.append(botaoExcluir);
+  li.append(botoesContainer);
+  
   // Editar tarefa
-  botao.addEventListener("click", () => {
+  botaoEditar.addEventListener("click", () => {
     const novoTexto = prompt("Editar tarefa", paragrafo.textContent);
     if (novoTexto) {
       paragrafo.textContent = novoTexto;
@@ -43,6 +50,13 @@ function criarElementoTarefa(tarefa) {
       atualizarTarefa();
     };
   });
+
+  // Excluir tarefa
+  botaoExcluir.addEventListener("click", () => {
+    li.remove();
+    // tarefas.
+  });
+
   return li;
 };
 
@@ -52,10 +66,7 @@ btnAdicionarNovaTarefa.addEventListener("click", () => {
 });
 
 // Botão cancelar
-btnCancelar.addEventListener("click", (e) => {
-  e.preventDefault();
-  limparFormulario();
-});
+btnCancelar.addEventListener("click", limparFormulario);
 
 // Evento click Adicionar Tarefa Botão Salvar
 btnSubmit.addEventListener("click", (e) => {
@@ -79,3 +90,4 @@ tarefas.forEach((tarefa) => {
   const novoElemento = criarElementoTarefa(tarefa);
   listaDeTarefas.append(novoElemento);
 });
+

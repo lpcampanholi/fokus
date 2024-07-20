@@ -2,13 +2,27 @@ const botaoAdicionar = document.querySelector(".app__button--add-task");
 const formAdicionarTarefa = document.querySelector(".app__form-add-task");
 const textArea = document.querySelector(".app__form-textarea");
 const ulTarefas = document.querySelector(".app__section-task-list");
+const botaoCancelar = document.querySelector(".app__form-footer__button--cancel");
+const paragrafoTarefaAtiva = document.querySelector(".app__section-active-task-description");
 
+// Obter tarefas na localStorage
 const tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
 
+// Tarefa selecionada
+let tarefaSelecionada = null;
+
+// Atualizar tarefas na localStorage
 function atualizarTarefas() {
   localStorage.setItem("tarefas", JSON.stringify(tarefas));
 };
 
+// Limpar formulário
+function limparFormulario() {
+  textArea.value = "";
+  formAdicionarTarefa.classList.add("hidden");
+};
+
+// Criar novo Elemento Tarefa
 function criarElementoTarefa(tarefa) {
   const li = document.createElement("li");
   li.classList.add("app__section-task-list-item");
@@ -35,24 +49,43 @@ function criarElementoTarefa(tarefa) {
   li.append(paragrafo);
   li.append(botao);
 
+  // Botão editar // Editar tarefas
   botao.addEventListener("click", () => {
-    debugger;
+    // debugger;
     const novaDescricao = prompt("Editar tarefa", paragrafo.textContent);
-    console.log(`nova descrição da tarefa: ${novaDescricao}`);
     if (novaDescricao) {
       paragrafo.textContent = novaDescricao;
       tarefa.descricao = novaDescricao;
       atualizarTarefas();
     };
-  })
+  });
+
+  // Tarefa Ativa
+  li.addEventListener("click", () => {
+    document.querySelectorAll(".app__section-task-list-item-active")
+      .forEach(elemento => elemento.classList.remove("app__section-task-list-item-active"));
+    if (tarefaSelecionada == tarefa) {
+      paragrafoTarefaAtiva.textContent = "";
+      tarefaSelecionada = null;
+      return
+    };
+    tarefaSelecionada = tarefa;
+    paragrafoTarefaAtiva.textContent =  tarefa.descricao;
+    li.classList.add("app__section-task-list-item-active");
+  });
 
   return li;
 };
 
+// Botão Adicionar tarefa // Aparecer Formulário
 botaoAdicionar.addEventListener("click", () => {
   formAdicionarTarefa.classList.toggle("hidden");
 });
 
+// Botão Cancelar
+botaoCancelar.addEventListener("click", limparFormulario);
+
+// Botão Salvar // Criar nova tarefa
 formAdicionarTarefa.addEventListener("submit", (evento) => {
   evento.preventDefault();
   const tarefa = {
@@ -68,6 +101,7 @@ formAdicionarTarefa.addEventListener("submit", (evento) => {
   atualizarTarefas();
 });
 
+// Renderizar tarefas na tela
 tarefas.forEach((tarefa) => {
   const elementoTarefa = criarElementoTarefa(tarefa);
   ulTarefas.append(elementoTarefa);
