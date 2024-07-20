@@ -12,11 +12,17 @@
 
   <main>
     
-    <button id ="button">Adicionar Tarefa</button>
+    <button class="button" id="btnSalvar">Adicionar nova Tarefa</button>
     
-    <form>
-      <textarea name="text-area" id="text_area"></textarea>
-      <button id="btnSubmit" type="submit">Salvar</button>
+    <form class="formulario hidden">
+      <h2 class="form_titulo">Adicionando tarefa</h2>
+      <div class="form_campo">
+        <textarea class="textarea" placeholder="Escreva aqui a atividade"></textarea>
+      </div>
+      <footer class="rodape_form">
+        <button class="button" id="btnCancelar">Cancelar</button>
+        <button class="button" id="btnSubmit" type="submit">Salvar</button>
+      </footer>
     </form>
     
     <ul class="listaDeTarefas"></ul>

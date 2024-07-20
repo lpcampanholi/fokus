@@ -1,12 +1,24 @@
-const btn = document.querySelector("#button");
-const textArea = document.querySelector("#text_area");
+const btnAdicionarNovaTarefa = document.querySelector("#btnSalvar");
+const textArea = document.querySelector(".textarea");
 const btnSubmit = document.querySelector("#btnSubmit");
+const btnCancelar = document.querySelector("#btnCancelar");
 const form = document.querySelector("form");
 const listaDeTarefas = document.querySelector(".listaDeTarefas");
 
 // Obter itens da localStorage
 const tarefas = JSON.parse(localStorage.getItem("Tarefas")) || [];
 console.log(`tarefas: ${tarefas}`);
+
+// Atualizar tarefa
+function atualizarTarefa() {
+  localStorage.setItem("Tarefas", JSON.stringify(tarefas));
+};
+
+// Limpar formulário
+function limparFormulario() {
+  textArea.value = "";
+  form.classList.add("hidden");
+};
 
 // Criar elemento Tarefa
 function criarElementoTarefa(tarefa) {
@@ -24,49 +36,46 @@ function criarElementoTarefa(tarefa) {
 
   // Editar tarefa
   botao.addEventListener("click", () => {
-    const novoTexto = prompt("Tarefa", paragrafo.textContent);
-    paragrafo.textContent = novoTexto || paragrafo.textContent;
+    const novoTexto = prompt("Editar tarefa", paragrafo.textContent);
+    if (novoTexto) {
+      paragrafo.textContent = novoTexto;
+      tarefa.descricao = novoTexto;
+      atualizarTarefa();
+    };
   });
-
   return li;
 };
 
-
 // Aparecer formulário
-btn.addEventListener("click", () => {
-  textArea.classList.toggle("hidden");
+btnAdicionarNovaTarefa.addEventListener("click", () => {
+  form.classList.toggle("hidden");
 });
 
+// Botão cancelar
+btnCancelar.addEventListener("click", (e) => {
+  e.preventDefault();
+  limparFormulario();
+});
 
-// Evento click Adicionar Tarefa
+// Evento click Adicionar Tarefa Botão Salvar
 btnSubmit.addEventListener("click", (e) => {
   e.preventDefault();
-
-  const tarefa = {
-  descricao: textArea.value
+  if (textArea.value) {
+    const tarefa = {
+    descricao: textArea.value
+    };
+    tarefas.push(tarefa);
+    atualizarTarefa();
+    const novoElemento = criarElementoTarefa(tarefa);
+    listaDeTarefas.append(novoElemento);
+    limparFormulario();
+  } else {
+    alert("A tarefa não pode estar vazia");
   };
-
-  tarefas.push(tarefa);
-  localStorage.setItem("Tarefas", JSON.stringify(tarefas));
-
-  const novoElemento = criarElementoTarefa(tarefa);
-  listaDeTarefas.append(novoElemento);
-
-  textArea.value = "";
-  textArea.classList.add("hidden");
-
 });
-
 
 // Renderizar tarefas na tela
 tarefas.forEach((tarefa) => {
   const novoElemento = criarElementoTarefa(tarefa);
   listaDeTarefas.append(novoElemento);
 });
-
-
-// function atualizarTarefa(tarefa) {
-//   const tarefas = JSON.parse(localStorage.getItem("Tarefas"));
-
-
-// };
