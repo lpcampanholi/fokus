@@ -1,4 +1,4 @@
-// CONTEXTO
+// CONTEXTO: FOCO, PAUSA, DESCANSO
 
 const html = document.querySelector("html");
 const focoBt = document.querySelector(".app__card-button--foco");
@@ -11,7 +11,7 @@ const titulo = document.querySelector(".app__title");
 const botoes = document.querySelectorAll(".app__card-button");
 
 focoBt.addEventListener("click", () => {
-  segundos = 1500;
+  segundos = 5;
   alterarContexto("foco");
   focoBt.classList.add("active");
 });
@@ -40,21 +40,19 @@ function alterarContexto(contexto) {
       titulo.innerHTML = `
       Otimize sua produtividade,<br>
       <strong class="app__title-strong">mergulhe no que importa.</strong>
-      `
+      `;
       break;
     case "descanso-curto":
       titulo.innerHTML = `
       Que tal dar uma respirada?<br>
       <strong class="app__title-strong">Faça uma pausa curta!</strong>
-      `
+      `;
       break;
     case "descanso-longo":
       titulo.innerHTML = `
       Hora de voltar à superfície.<br>
       <strong class="app__title-strong">Faça uma pausa longa.</strong>
-      `
-      break;
-    default:
+      `;
       break;
   };
 };
@@ -72,7 +70,7 @@ musicaFocoInput.addEventListener("change", () => {
     musica.play();
   } else {
     musica.pause();
-  }
+  };
 });
 
 // TEMPORIZADOR
@@ -82,7 +80,7 @@ const audioTempoFinalizado = new Audio("sons/beep.mp3");
 const audioPause = new Audio("sons/pause.mp3");
 const audioPlay = new Audio("sons/play.wav");
 
-let segundos = 1500;
+let segundos = 5;
 let intervaloId = null;
 
 console.log(segundos);
@@ -96,30 +94,33 @@ startPauseBt.addEventListener("click", () => {
   if (intervaloId) {
     audioPause.play();
     pararIntervalo();
-    return
-  }
+    return;
+  };
   audioPlay.play();
   iniciarIntervalo();
 });
 
 const contagemRegressiva = () => {
-  if (segundos === 0) {
-    console.log("Tempo finalizado");
+  if (segundos <= 0) {
     audioTempoFinalizado.play();
+    alert("Tempo finalizado");
+    const focoAtivo = html.getAttribute("data-contexto") == "foco";
+    if (focoAtivo) {
+      const evento = new CustomEvent("FocoFinalizado");
+      document.dispatchEvent(evento);
+    };
     pararIntervalo();
-    segundos = 1500;
     mostrarTempo();
-    return
-  }
+    return;
+  };
   segundos--;
-  console.log(segundos);
   mostrarTempo();
 };
 
 function iniciarIntervalo() {
   intervaloId = setInterval(contagemRegressiva, 1000);
   startPauseBtConteudo.textContent = "Pausar";
-  startPauseBtImagem.setAttribute("src", "imagens/pause.png")
+  startPauseBtImagem.setAttribute("src", "imagens/pause.png");
 };
 
 function pararIntervalo() {
@@ -127,7 +128,7 @@ function pararIntervalo() {
   intervaloId = null;
   console.log("Intervalo parado");
   startPauseBtConteudo.textContent = "Começar";
-  startPauseBtImagem.setAttribute("src", "imagens/play_arrow.png")
+  startPauseBtImagem.setAttribute("src", "imagens/play_arrow.png");
 };
 
 
