@@ -4,9 +4,10 @@ const textArea = document.querySelector(".app__form-textarea");
 const ulTarefas = document.querySelector(".app__section-task-list");
 const botaoCancelar = document.querySelector(".app__form-footer__button--cancel");
 const paragrafoTarefaAtiva = document.querySelector(".app__section-active-task-description");
+const btnRemoverConcluidas = document.querySelector("#btn-remover-concluidas");
 
 // Obter tarefas na localStorage
-const tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
+let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
 
 // Tarefa selecionada
 let tarefaSelecionada = null;
@@ -61,11 +62,11 @@ function criarElementoTarefa(tarefa) {
     };
   });
 
+  // Selecionar tarefa
   if (tarefa.completa) {
     li.classList.add("app__section-task-list-item-complete");
     botao.setAttribute("disabled", "disabled");
   } else {
-    // Selecionar tarefa ativa
     li.addEventListener("click", () => {
       // Remover a seleção de todas tarefas
       document.querySelectorAll(".app__section-task-list-item-active")
@@ -75,9 +76,9 @@ function criarElementoTarefa(tarefa) {
         paragrafoTarefaAtiva.textContent = "";
         tarefaSelecionada = null;
         liTarefaSelecionada = null;
-        return; //early return
+        return;
       };
-      // Selecionar tarefa ativa
+      // Selecionar tarefa
       tarefaSelecionada = tarefa;
       liTarefaSelecionada = li;
       paragrafoTarefaAtiva.textContent =  tarefa.descricao;
@@ -118,13 +119,23 @@ tarefas.forEach((tarefa) => {
   ulTarefas.append(elementoTarefa);
 });
 
-// TAREFA COMPLETA
+// Completar tarefa
 document.addEventListener("FocoFinalizado", () => {
   if (tarefaSelecionada && liTarefaSelecionada) {
     liTarefaSelecionada.classList.remove("app__section-task-list-item-active");
     liTarefaSelecionada.classList.add("app__section-task-list-item-complete");
     liTarefaSelecionada.querySelector("button").setAttribute("disabled", "disabled");
     tarefaSelecionada.completa = true;
+    paragrafoTarefaAtiva.textContent = "";
     atualizarTarefas();
   };
+});
+
+// Remover tarefas concluídas
+btnRemoverConcluidas.addEventListener("click", () => {
+  const seletor = ".app__section-task-list-item-complete"; // Seletor de tarefas completas
+  document.querySelectorAll(seletor).forEach((elemento) => {
+    elemento.remove();
+  });
+  tarefas = tarefas.filter(tarefa => !tarefa.completa);
 });

@@ -80,10 +80,8 @@ const audioTempoFinalizado = new Audio("sons/beep.mp3");
 const audioPause = new Audio("sons/pause.mp3");
 const audioPlay = new Audio("sons/play.wav");
 
-let segundos = 5;
+let segundos = 3;
 let intervaloId = null;
-
-console.log(segundos);
 
 // Botão começar
 const startPauseBt = document.querySelector("#start-pause");
@@ -103,7 +101,6 @@ startPauseBt.addEventListener("click", () => {
 const contagemRegressiva = () => {
   if (segundos <= 0) {
     audioTempoFinalizado.play();
-    alert("Tempo finalizado");
     const focoAtivo = html.getAttribute("data-contexto") == "foco";
     if (focoAtivo) {
       const evento = new CustomEvent("FocoFinalizado");
