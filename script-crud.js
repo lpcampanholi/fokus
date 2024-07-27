@@ -5,6 +5,7 @@ const ulTarefas = document.querySelector(".app__section-task-list");
 const botaoCancelar = document.querySelector(".app__form-footer__button--cancel");
 const paragrafoTarefaAtiva = document.querySelector(".app__section-active-task-description");
 const btnRemoverConcluidas = document.querySelector("#btn-remover-concluidas");
+const btnRemoverTodas = document.querySelector("#btn-remover-todas");
 
 // Obter tarefas na localStorage
 let tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
@@ -72,7 +73,7 @@ function criarElementoTarefa(tarefa) {
       document.querySelectorAll(".app__section-task-list-item-active")
         .forEach(elemento => elemento.classList.remove("app__section-task-list-item-active"));
       // Remover seleção da tarefa ativa se ela já estiver selecionada
-      if (tarefaSelecionada == tarefa) {
+      if (tarefaSelecionada == tarefa || tarefa.completa) {
         paragrafoTarefaAtiva.textContent = "";
         tarefaSelecionada = null;
         liTarefaSelecionada = null;
@@ -131,11 +132,13 @@ document.addEventListener("FocoFinalizado", () => {
   };
 });
 
-// Remover tarefas concluídas
-btnRemoverConcluidas.addEventListener("click", () => {
-  const seletor = ".app__section-task-list-item-complete"; // Seletor de tarefas completas
-  document.querySelectorAll(seletor).forEach((elemento) => {
-    elemento.remove();
-  });
-  tarefas = tarefas.filter(tarefa => !tarefa.completa);
-});
+// Remover tarefas
+const removerTarefas = (somenteCompletas) => {
+  const seletor = somenteCompletas ? ".app__section-task-list-item-complete" : ".app__section-task-list-item";
+  document.querySelectorAll(seletor).forEach(elemento => elemento.remove());
+  tarefas = somenteCompletas ? tarefas.filter(tarefa => !tarefa.completa) : [];
+  atualizarTarefas();
+ };
+
+ btnRemoverConcluidas.onclick = () => removerTarefas(true);
+ btnRemoverTodas.onclick = () => removerTarefas(false);

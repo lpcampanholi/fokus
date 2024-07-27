@@ -2,8 +2,8 @@
 
 const html = document.querySelector("html");
 const focoBt = document.querySelector(".app__card-button--foco");
-const curtoBt = document.querySelector(".app__card-button--curto");
-const longoBt = document.querySelector(".app__card-button--longo");
+const pausaBt = document.querySelector(".app__card-button--curto");
+const descansoBt = document.querySelector(".app__card-button--longo");
 
 const banner = document.querySelector(".app__image");
 const titulo = document.querySelector(".app__title");
@@ -11,21 +11,21 @@ const titulo = document.querySelector(".app__title");
 const botoes = document.querySelectorAll(".app__card-button");
 
 focoBt.addEventListener("click", () => {
-  segundos = 5;
+  segundos = 1800;
   alterarContexto("foco");
   focoBt.classList.add("active");
 });
 
-curtoBt.addEventListener("click", () => {
+pausaBt.addEventListener("click", () => {
   segundos = 300;
   alterarContexto("descanso-curto");
-  curtoBt.classList.add("active");
+  pausaBt.classList.add("active");
 });
 
-longoBt.addEventListener("click", () => {
+descansoBt.addEventListener("click", () => {
   segundos = 900;
   alterarContexto("descanso-longo");
-  longoBt.classList.add("active");
+  descansoBt.classList.add("active");
 });
 
 function alterarContexto(contexto) {
@@ -80,7 +80,7 @@ const audioTempoFinalizado = new Audio("sons/beep.mp3");
 const audioPause = new Audio("sons/pause.mp3");
 const audioPlay = new Audio("sons/play.wav");
 
-let segundos = 3;
+let segundos = 1800;
 let intervaloId = null;
 
 // Botão começar
